@@ -20,6 +20,6 @@ from django.conf import settings
 
 urlpatterns = [
     path('bookmeteranalyzer/', include('bookmeteranalyzer.urls')),
-    path('admin/', admin.site.urls),
     path('',  RedirectView.as_view(url='/bookmeteranalyzer/')),
+    path('admin/', admin.site.urls),
 ]

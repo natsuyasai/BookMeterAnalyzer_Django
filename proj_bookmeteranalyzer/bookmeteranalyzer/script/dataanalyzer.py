@@ -41,24 +41,27 @@ class DataAnalyzer:
     def outputCSV(self):
         """ csv出力
         """
+        # 文字列生成
+        writeStr = 'タイトル,著者名,登録日,年月,冊数,ページ数,本詳細ページ\n'
+        for info in self.__bookInfoList:
+            key = self.__createYMKey(info.registDate)
+            writeStr +=\
+                '"' + info.title + '",'\
+                '"'+ info.author + '",' \
+                + info.registDate + ',' \
+                + key + ','\
+                + str(self.__dateCntDict.get(key,0)) + ','\
+                + info.page + ','\
+                + BOOK_INFO_URL + info.id + '\n'\
+        # ファイルへ書き込み
         filename = OUT_ROOT_DIR + 'csv/' + self.__userID + '.csv'
-        with open(filename, 'a', encoding='utf-8_sig') as csvFile:
-            csvFile.write('タイトル,著者名,登録日,年月,冊数,ページ数,本詳細ページ\n')
-            for info in self.__bookInfoList:
-                key = self.__createYMKey(info.registDate)
-                csvFile.write(
-                    '"' + info.title + '",'
-                    '"'+ info.author + '",' 
-                    + info.registDate + ',' 
-                    + key + ','
-                    + str(self.__dateCntDict[key]) + ','
-                    + info.page + ','
-                    + BOOK_INFO_URL + info.id + '\n')
+        with open(filename, 'w', encoding='utf-8_sig') as csvFile:
+            csvFile.write(writeStr)
 
 
 
-    def protBarGraph(self):
-        """ 棒グラフプロット
+    def protBarGraphForMonthReads(self):
+        """ 月別読書量棒グラフプロット
         """
         # dictのkey/valueをそれぞれlistに変換
         bookNumList = []
@@ -69,26 +72,37 @@ class DataAnalyzer:
         # 順番が最新順なので逆順にする
         bookNumList.reverse()
         dateList.reverse()
-        for i in range(0,3,1):
-            del bookNumList[0]
-            del dateList[0]
-
-
+        # 自分用デバッグコード(初登録時のデータを除外)
+        if self.__userID == '577685':
+            for i in range(0,3,1):
+                del bookNumList[0]
+                del dateList[0]
 
         # リストからnumpyのarrayに変換
         height = numpy.array(bookNumList)
         left = numpy.array(dateList)
 
         # グラフデータ設定
+        filename = OUT_ROOT_DIR + 'image/' + self.__userID + '.png'
+        self.__createBarGraph(left, height, 'Month', 'The Number of books', 'The number of books which I read', filename)
+
+    
+    def __createBarGraph(self, left: numpy.array, height: numpy.array, xlabel: str, ylabel: str, title:str,  filename: str):
+        """ 棒グラフ生成
+        [I] left X軸
+        [I] height Y軸
+        [I] filename ファイル名
+        """
+        # グラフデータ設定
         pyplot.tight_layout()
         pyplot.figure()
-        pyplot.title('The number of books which I read')
-        pyplot.xlabel('Month')
-        pyplot.ylabel('The Number of books')
+        pyplot.title(title)
+        pyplot.xlabel(xlabel)
+        pyplot.ylabel(ylabel)
         pyplot.bar(x=left, height=height, align='center')
         pyplot.grid(color='gray', linestyle='dotted')
+        pyplot.minorticks_on()
         pyplot.xticks(range(len(left)), left,rotation=90)
-        filename = OUT_ROOT_DIR + 'image/' + self.__userID + '.png'
         pyplot.savefig(filename, format = 'png', dpi=500, bbox_inches='tight')
         #pyplot.show()
          
@@ -142,7 +156,12 @@ class DataAnalyzer:
             # 今回値を保持
             prvMonthCnt = dateCntDict[dateStr]
             prvDate = dateStr
-        dateCntInfo['日付不明'] = 0
+        # 最終データを保持
+        key =  self.__createYMKey(prvDate)
+        dateCntInfo[key] = prvMonthCnt
+        # 日付不明は0とする
+        if '日付不明' in dateCntDict:
+            dateCntInfo['日付不明'] = 0
         return dateCntInfo
 
 

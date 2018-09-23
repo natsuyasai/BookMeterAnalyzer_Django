@@ -24,5 +24,5 @@ def execAnalyze(userID : str):
     analyzer = DataAnalyzer(bookInfoList, userID)
     # csv出力
     analyzer.outputCSV()
-    # グラフ表示
-    analyzer.protBarGraph()
+    # 月別読書量グラフ表示
+    analyzer.protBarGraphForMonthReads()
