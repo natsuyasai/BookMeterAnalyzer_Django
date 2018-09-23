@@ -1,0 +1,30 @@
+{% extends 'bookmeteranalyzer/base.html' %}
+
+{% block content %}
+<h1>読書メーター読了リスト解析</h1>
+<p>読書メーターの読んだ本の情報を解析し，登録開始日からの読書量推移をグラフ化します</p>
+
+{% if error_message %}<p><strong>{{error_message}}</strong></p>{% endif %}
+<form action="{% url 'bookmeteranalyzer:analyze' %}" method="post">
+    {% csrf_token %}
+    <!-- User ID -->
+    <div class="form-group">
+        <label for="bookmeteranalyzer" class="col-sm-3 control-label">UserID</label>
+        <div class ="col-sm-6">
+            {{ form.userID }}
+        </div>
+    </div>
+
+    <!-- Analyze Button -->
+    <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-6">
+            <button type="submit" class="btn btn-default">
+                <i class="fa fa-plus"></i>解析実行
+            </button>
+        </div>
+    </div>
+</form>
+
+<!-- Current Todos -->
+<h2>結果</h2>
+{% endblock %}
