@@ -24,11 +24,12 @@ def analyze(request):
     analyze_user_id = request.POST.get('user_id')
     execAnalyze(analyze_user_id)
     # 結果の画像を登録
-    filename = analyze_user_id + '.png'
-    img_open = open('./bookmeteranalyzer/analyzedata/image/' + filename, 'rb')
+    img_filename = analyze_user_id + '.png'
+    #csv_filename = analyze_user_id + '.csv'
+    img_open = open('./bookmeteranalyzer/analyzedata/image/' + img_filename, 'rb')
     analyze_rslt = AnalyzeResult()
     analyze_rslt.user_id = analyze_user_id
-    analyze_rslt.img_file.save(filename, File(img_open), save=True)
+    analyze_rslt.img_file.save(img_filename, File(img_open), save=False)
     # 結果生成
     img_file = AnalyzeResult.objects.filter(user_id=analyze_user_id)
     return render(
