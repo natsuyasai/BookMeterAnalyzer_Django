@@ -22,6 +22,14 @@ def index(request):
 def analyze(request):
     form = PostForm(request.POST)
     analyze_user_id = request.POST.get('user_id')
+    # 文字列が数値でなければ処理終了
+    if analyze_user_id.isdigit() == False:
+        return render(
+            request,
+            'bookmeteranalyzer/index.html',
+            {'img_file': None, 'form': form},
+            )
+    # 解析実施
     execAnalyze(analyze_user_id)
     # 結果の画像を登録
     img_filename = analyze_user_id + '.png'
