@@ -2,19 +2,19 @@
 
 {% block content %}
 <h1>読書メーター読了リスト解析</h1>
-<p>読書メーターの読んだ本の情報を解析し，登録開始日からの読書量推移をグラフ化します</p>
+<p>読書メーターの読んだ本の情報を解析し，登録開始日からの読書量推移をグラフ化します．</p>
 
 {% if error_message %}<p><strong>{{error_message}}</strong></p>{% endif %}
 <form action="{% url 'bookmeteranalyzer:analyze' %}" method="post">
     {% csrf_token %}
     <!-- User ID -->
     <div class="form-group">
-        <label for="bookmeteranalyzer" class="col-sm-3 control-label">UserID</label>
+        <label for="bookmeteranalyzer" class="col-sm-3 control-label">UserIDを入力</label>
+        <div class ="col-sm-6">
+            {{ form.user_id }}
+        </div>
         <p><a href="https://bookmeter.com/" target="_blank">読書メーター</a>のマイページを開き，urlのusers/以降の数字を入力してください．</p>
         <p>例)"https://bookmeter.com/users/12345"の「12345」部分</p>
-        <div class ="col-sm-6">
-            {{ form.userID }}
-        </div>
     </div>
 
     <!-- Analyze Button -->
@@ -27,6 +27,13 @@
     </div>
 </form>
 
-<!-- Current Todos -->
+<!-- Result -->
 <h2>結果</h2>
+{% for img in  img_file%}
+    {% if img_file %}
+        <img src="{{ img.img_file.url }}" alt="{{ img.img_file.name }}">
+    {% else %}
+        <p>Not Found</p>
+    {% endif %}
+{% endfor %}
 {% endblock %}

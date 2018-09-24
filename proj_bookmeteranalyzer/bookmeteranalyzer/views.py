@@ -1,7 +1,12 @@
 from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
+from django.core.files import File
+from django.conf import settings
 from .models import Post
+from .models import AnalyzeResult
 from .forms import PostForm
 from .script.analyzer import execAnalyze
 
@@ -15,6 +20,18 @@ def index(request):
     
 def analyze(request):
     form = PostForm(request.POST)
-    execAnalyze(request.POST.get('userID'))
-    #form.save(commit=True)
-    return HttpResponseRedirect(reverse('bookmeteranalyzer:index'))
+    analyze_user_id = request.POST.get('user_id')
+    execAnalyze(analyze_user_id)
+    # 結果の画像を登録
+    filename = analyze_user_id + '.png'
+    img_open = open('./bookmeteranalyzer/analyzedata/image/' + filename, 'rb')
+    analyze_rslt = AnalyzeResult()
+    analyze_rslt.img_file.save(filename, File(img_open), save=True)
+    # 結果生成
+    img_file = AnalyzeResult.objects.filter(img_file='image/'+filename)
+    print(img_file)
+    return render(
+        request,
+        'bookmeteranalyzer/index.html',
+        {'img_file':img_file, 'form': form},
+    )
