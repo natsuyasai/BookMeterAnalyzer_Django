@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.core.files import File
 from django.conf import settings
+from django_cleanup import cleanup
 from .models import Post
 from .models import AnalyzeResult
 from .forms import PostForm
@@ -26,10 +27,10 @@ def analyze(request):
     filename = analyze_user_id + '.png'
     img_open = open('./bookmeteranalyzer/analyzedata/image/' + filename, 'rb')
     analyze_rslt = AnalyzeResult()
+    analyze_rslt.user_id = analyze_user_id
     analyze_rslt.img_file.save(filename, File(img_open), save=True)
     # 結果生成
-    img_file = AnalyzeResult.objects.filter(img_file='image/'+filename)
-    print(img_file)
+    img_file = AnalyzeResult.objects.filter(user_id=analyze_user_id)
     return render(
         request,
         'bookmeteranalyzer/index.html',

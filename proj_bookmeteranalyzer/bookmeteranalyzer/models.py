@@ -7,4 +7,8 @@ class Post(models.Model):
 
 
 class AnalyzeResult(models.Model):
-    img_file = models.ImageField(upload_to='image')
+    # ユーザIDを主キーとし，画像ファイルパスを保持する
+    user_id = models.CharField(primary_key=True, max_length=20)
+    img_file = models.ImageField(upload_to='image/')
+
+

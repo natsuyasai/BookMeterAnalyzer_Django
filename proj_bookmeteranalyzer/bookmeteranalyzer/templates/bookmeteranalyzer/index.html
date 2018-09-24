@@ -31,7 +31,7 @@
 <h2>結果</h2>
 {% for img in  img_file%}
     {% if img_file %}
-        <img src="{{ img.img_file.url }}" alt="{{ img.img_file.name }}">
+        <img src="{{ img.img_file.url }}" alt="{{ img.img_file.name }}" width="50%" height="50%">
     {% else %}
         <p>Not Found</p>
     {% endif %}

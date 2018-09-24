@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bookmeteranalyzer.apps.BookmeteranalyzerConfig',
+    'django_cleanup',
 ]
 
 MIDDLEWARE = [
