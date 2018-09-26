@@ -5,13 +5,14 @@
 <p>読書メーターの読んだ本の情報を解析し，登録開始日からの読書量推移をグラフ化します．</p>
 
 {% if error_message %}<p><strong>{{error_message}}</strong></p>{% endif %}
-<form action="{% url 'bookmeteranalyzer:analyze' %}" method="post">
+<form id="analyzefome" action="{% url 'bookmeteranalyzer:analyze' %}" method="post">
     {% csrf_token %}
     <!-- User ID -->
     <div class="form-group">
         <label for="bookmeteranalyzer" class="col-sm-3 control-label">UserIDを入力</label>
         <div class ="col-sm-6">
             {{ form.user_id }}
+            <!--<input type="text" id="user_id">-->
         </div>
         <p><a href="https://bookmeter.com/" target="_blank">読書メーター</a>のマイページを開き，urlのusers/以降の数字を入力してください．</p>
         <p>例)"https://bookmeter.com/users/12345"の「12345」部分</p>
@@ -19,21 +20,79 @@
 
     <!-- Analyze Button -->
     <div class="form-group">
-        <div class="col-sm-offset-3 col-sm-6">
+        <!--<div class="col-sm-offset-3 col-sm-6">-->
             <button type="submit" class="btn btn-default">
                 <i class="fa fa-plus"></i>解析実行
             </button>
-        </div>
+        <!--</div>-->
     </div>
 </form>
 
+<!-- script -->
+    <script>
+        // CSRT対策関連
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        var csrftoken = getCookie('csrftoken');
+    
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+    </script>
+
 <!-- Result -->
-{% for img in  img_file%}
-    {% if img %}
-        <h2>結果</h2>
-        <img src="{{ img.img_file.url }}" alt="{{ img.img_file.name }}" width="50%" height="50%">
-    {% else %}
-        <p>Not Found</p>
-    {% endif %}
-{% endfor %}
+    <div id="result">
+        <!--{% for img in  img_file%}
+            {% if img_file %}
+                <h2>結果</h2>
+                <img src="{{ img_file.url }}" alt="{{ img_file.name }}" width="50%" height="50%">
+            {% else %}
+                <h2>結果</h2>
+                <p>Not Found</p>
+            {% endif %}
+        {% endfor %}-->
+    </div>
+
+    <!-- ajax -->
+    <script>
+        $('#analyzefome').submit(function(event) {
+            event.preventDefault();
+            //$('#result').html('');
+            $.ajax({
+                'url':'{% url "bookmeteranalyzer:analyze" %}',
+                'type':'POST',
+                'data':{
+                    'user_id':$('#id_user_id').val(),
+                },
+                'dataType':'json',
+                'success':function(response){
+                    var rsltstr = '<h2>結果</h2>';
+                    rsltstr+='<img src="' + response.img_file_url + '" width="50%" height="50%">';
+                    $('#result').append(rsltstr);          
+                },
+            });
+            return false;
+        });
+    </script>
 {% endblock %}
