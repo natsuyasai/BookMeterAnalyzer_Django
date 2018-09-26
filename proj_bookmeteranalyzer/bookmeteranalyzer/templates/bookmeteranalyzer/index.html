@@ -62,6 +62,9 @@
     </script>
 
 <!-- Result -->
+    <div id="loading">
+        {% load static %}
+    </div>
     <div id="result">
         <!--{% for img in  img_file%}
             {% if img_file %}
@@ -77,8 +80,14 @@
     <!-- ajax -->
     <script>
         $('#analyzefome').submit(function(event) {
+            // 通常のイベントを停止
             event.preventDefault();
-            //$('#result').html('');
+            // ロード中表示
+            $(function(){
+                var loag_img = '<img src="{% static "bookmeteranalyzer/img/ajax-loader.gif" %}" alt="Loading"/>'
+                $('#loading').append(loag_img);
+            });
+            $('#result').html('');
             $.ajax({
                 'url':'{% url "bookmeteranalyzer:analyze" %}',
                 'type':'POST',
@@ -87,8 +96,11 @@
                 },
                 'dataType':'json',
                 'success':function(response){
+                    // ロード中表示停止
+                    $("#loading").html('');
+                    // 結果表示
                     var rsltstr = '<h2>結果</h2>';
-                    rsltstr+='<img src="' + response.img_file_url + '" width="50%" height="50%">';
+                    rsltstr+='<img src="' + response.img_file_url + '" alt="result" width="50%" height="50%">';
                     $('#result').append(rsltstr);          
                 },
             });
