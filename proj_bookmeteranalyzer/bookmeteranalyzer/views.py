@@ -45,7 +45,7 @@ def analyze(request):
     img_file = AnalyzeResult.objects.filter(user_id=analyze_user_id).first()
     # ImgaeFiledをjson化
     to_json = json.dumps(str(img_file.img_file))
-    rslt_str = "/media/" + to_json.replace('"','')
+    rslt_str = "media/" + to_json.replace('"','')
     print(rslt_str)
     return JsonResponse({'img_file_url': rslt_str})
     """

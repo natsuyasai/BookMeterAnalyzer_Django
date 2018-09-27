@@ -66,15 +66,11 @@
         {% load static %}
     </div>
     <div id="result">
-        <!--{% for img in  img_file%}
-            {% if img_file %}
-                <h2>結果</h2>
-                <img src="{{ img_file.url }}" alt="{{ img_file.name }}" width="50%" height="50%">
-            {% else %}
-                <h2>結果</h2>
-                <p>Not Found</p>
-            {% endif %}
-        {% endfor %}-->
+    </div>
+    <div id="tweet">
+        <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" 
+        class="twitter-share-button" data-size="large" data-show-count="false">Tweet</a>
+        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     </div>
 
     <!-- ajax -->
@@ -99,9 +95,18 @@
                     // ロード中表示停止
                     $("#loading").html('');
                     // 結果表示
-                    var rsltstr = '<h2>結果</h2>';
-                    rsltstr+='<img src="' + response.img_file_url + '" alt="result" width="50%" height="50%">';
-                    $('#result').append(rsltstr);          
+                    var rsltstr = '<h2>結果</h2>';        
+                    // 画像設定
+                    rsltstr += '<img src="/' + response.img_file_url + '" alt="result" width="50%" height="50%">';
+                    $('#result').append(rsltstr);
+                    // ツイート用情報生成
+                    urlstr = location.href.replace('bookmeteranalyzer/','');
+                    var tweetStr = '<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" \
+                                class="twitter-share-button" data-size="large" data-show-count="false"' + 
+                                'data-text=月別読書数→"' + urlstr + response.img_file_url + '"' +
+                                '>Tweet</a>';
+                    tweetStr += '<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"><\/script>'
+                    $('#tweet').replaceWith(tweetStr);
                 },
             });
             return false;
