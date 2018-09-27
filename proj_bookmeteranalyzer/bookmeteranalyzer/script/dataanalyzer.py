@@ -15,7 +15,8 @@ import sys
 import numpy
 import matplotlib.pyplot as pyplot
 import matplotlib.font_manager as plotfont
-
+import os
+from matplotlib.font_manager import FontProperties
 #********************************
 
 # const *************************
@@ -84,7 +85,7 @@ class DataAnalyzer:
 
         # グラフデータ設定
         filename = OUT_ROOT_DIR + 'image/' + self.__userID + '.png'
-        self.__createBarGraph(left, height, 'Month', 'The Number of books', 'The number of books which I read', filename)
+        self.__createBarGraph(left, height, '年月', '冊数', '月ごとの読書冊数', filename)
 
     
     def __createBarGraph(self, left: numpy.array, height: numpy.array, xlabel: str, ylabel: str, title:str,  filename: str):
@@ -93,12 +94,15 @@ class DataAnalyzer:
         [I] height Y軸
         [I] filename ファイル名
         """
+        # フォント設定
+        path = os.path.dirname(os.path.abspath(__file__))
+        fontprop = FontProperties(fname=path + '/font/NotoSansCJKjp-Medium.otf', size=10)
         # グラフデータ設定
         pyplot.tight_layout()
         pyplot.figure()
-        pyplot.title(title)
-        pyplot.xlabel(xlabel)
-        pyplot.ylabel(ylabel)
+        pyplot.title(title, font_properties=fontprop)
+        pyplot.xlabel(xlabel, font_properties=fontprop)
+        pyplot.ylabel(ylabel, font_properties=fontprop)
         pyplot.bar(x=left, height=height, align='center')
         pyplot.grid(color='gray', linestyle='dotted')
         pyplot.minorticks_on()
