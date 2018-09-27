@@ -39,7 +39,7 @@ def analyze(request):
     img_open = open('./bookmeteranalyzer/analyzedata/image/' + img_filename, 'rb')
     analyze_rslt = AnalyzeResult()
     analyze_rslt.user_id = analyze_user_id
-    analyze_rslt.img_file.save(img_filename, File(img_open), save=False)
+    analyze_rslt.img_file.save(img_filename, File(img_open), save=True)
     # 結果生成
     # 指定ユーザIDの画像をDBから取得
     img_file = AnalyzeResult.objects.filter(user_id=analyze_user_id).first()
