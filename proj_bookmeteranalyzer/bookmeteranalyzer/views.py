@@ -56,8 +56,6 @@ def analyze(request):
     # URL生成
     img_url_str = "media/" + img_file_to_json.replace('"','')
     csv_url_str = "media/" + csv_file_to_json.replace('"','')
-    print(img_url_str)
-    print(csv_url_str)
     # 結果をjsonとして返す
     return JsonResponse({'img_file_url' : img_url_str, 'csv_file_url' : csv_url_str})
     """
