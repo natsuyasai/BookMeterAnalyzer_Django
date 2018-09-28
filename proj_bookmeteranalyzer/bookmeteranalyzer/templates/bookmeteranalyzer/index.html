@@ -5,7 +5,7 @@
 <p>読書メーターの読んだ本の情報を解析し，登録開始日からの読書量推移をグラフ化します．</p>
 <p>※冊数が多い場合は解析に時間がかかります．</p>
 <p>不具合等は<a href="https://twitter.com/natsuyasai7">@natsuyasai7</a>へ連絡下さい．</p>
-
+<hr/>
 {% if error_message %}<p><strong>{{error_message}}</strong></p>{% endif %}
 <form id="analyzefome" action="{% url 'bookmeteranalyzer:analyze' %}" method="post">
     {% csrf_token %}
@@ -23,7 +23,7 @@
     <!-- Analyze Button -->
     <div class="form-group">
         <!--<div class="col-sm-offset-3 col-sm-6">-->
-            <button type="submit" class="btn btn-default">
+            <button type="submit" class="button button-default">
                 <i class="fa fa-plus"></i>解析実行
             </button>
         <!--</div>-->
@@ -67,7 +67,9 @@
     <div id="loading">
         {% load static %}
     </div>
-    <div id="result">
+    <div id="imgfilr">
+    </div>
+    <div id="csvfile">
     </div>
     <div id="tweet">
         <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" 
@@ -85,8 +87,8 @@
                 var loag_img = '<img src="{% static "bookmeteranalyzer/img/ajax-loader.gif" %}" alt="Loading"/>'
                 $('#loading').append(loag_img);
             });
-            $('#result').html('');
-            $.ajax({
+            $('#imgfilr').html('');
+            $.ajax({ // 非同期実行
                 'url':'{% url "bookmeteranalyzer:analyze" %}',
                 'type':'POST',
                 'data':{
@@ -94,16 +96,24 @@
                 },
                 'dataType':'json',
                 'timeout': '120000',
-                'success':function(response){
+                'success':function(response){ // 結果を反映する
                     // ロード中表示停止
                     $("#loading").html('');
                     // 結果表示
                     var rsltstr = '<h2>結果</h2>';        
                     // 画像設定
                     rsltstr += '<img src="/' + response.img_file_url + '" alt="result" width="50%" height="50%">';
-                    $('#result').append(rsltstr);
-                    // ツイート用情報生成
+                    $('#imgfilr').append(rsltstr);
+                    // url取得
                     urlstr = location.href.replace('bookmeteranalyzer/','');
+                    // csvファイル設定
+                    var csvData = '<button type="button" class="button button-outline" onClick="location.href=\'' 
+                    + urlstr + response.csv_file_url
+                    + '\'">解析結果csvファイルダウンロード</button>';
+                    console.log(csvData)
+                    //'<h4><a href="' + urlstr + response.csv_file_url + '">解析結果csvファイル</a></h4>';
+                    $('#csvfile').append(csvData);
+                    // ツイート用情報生成
                     var tweetStr = '<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" \
                                 class="twitter-share-button" data-size="large" data-show-count="false"' + 
                                 'data-text=月別読書数→"' + urlstr + response.img_file_url + '"' +
@@ -112,7 +122,9 @@
                     $('#tweet').replaceWith(tweetStr);
                 },
                 'error':function(response){
-                    $('#result').append('<p>タイムアウトが発生しました</p>');
+                    // ロード中表示停止
+                    $("#loading").html('');
+                    $('#imgfilr').append('<p>エラーが発生しました</p>');
                 },
             });
             return false;
