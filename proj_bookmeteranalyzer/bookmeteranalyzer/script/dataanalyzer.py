@@ -68,14 +68,15 @@ class DataAnalyzer:
         bookNumList = []
         dateList = []
         for num in self.__dateCntDict:
-            bookNumList.append(self.__dateCntDict[num])
-            dateList.append(num)
+            if num != '日付不明': # 日付不明はとばす
+                bookNumList.append(self.__dateCntDict[num])
+                dateList.append(num)
         # 順番が最新順なので逆順にする
         bookNumList.reverse()
         dateList.reverse()
         # 自分用デバッグコード(初登録時のデータを除外)
         if self.__userID == '577685':
-            for i in range(0,3,1):
+            for i in range(0,2,1):
                 del bookNumList[0]
                 del dateList[0]
 
