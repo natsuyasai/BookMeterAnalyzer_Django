@@ -1,1 +1,1 @@
-web: gunicorn mysite.wsgi
+web: gunicorn proj_bookmeteranalyzer.wsgi
