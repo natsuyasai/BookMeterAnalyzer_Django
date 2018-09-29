@@ -126,8 +126,8 @@ STATIC_ROOT = 'staticfiles'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
-MEDIA_URL = 'https://bookmeteranalyzer-media.s3.amazonaws.com/media/'
-#MEDIA_ROOT = ''
+MEDIA_URL = 'https://s3-ap-northeast-1.amazonaws.com/bookmeteranalyzer-media/'
+MEDIA_ROOT = 'https://s3-ap-northeast-1.amazonaws.com/bookmeteranalyzer-media/'
 
 import dj_database_url
 DATABASES['default'] = dj_database_url.config()
@@ -136,7 +136,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 ALLOWED_HOSTS = ['*']
 
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 AWS_ACCESS_KEY_ID = ''
 AWS_SECRET_ACCESS_KEY = ''
 AWS_STORAGE_BUCKET_NAME = 'bookmeteranalyzer-media'

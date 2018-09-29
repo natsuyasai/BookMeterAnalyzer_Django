@@ -102,21 +102,19 @@
                     // 結果表示
                     var rsltstr = '<h2>結果</h2>';        
                     // 画像設定
-                    rsltstr += '<img src="/' + response.img_file_url + '" alt="result" width="50%" height="50%">';
-                    $('#imgfilr').append(rsltstr);
+                    rsltstr += '<img src="' + response.img_file_url + '" alt="result" width="50%" height="50%"><br>';
+                    $('#imgfilr').replaceWith(rsltstr);
                     // url取得
-                    urlstr = location.href.replace('bookmeteranalyzer/','');
+                    //urlstr = location.href.replace('bookmeteranalyzer/','');
                     // csvファイル設定
                     var csvData = '<button type="button" class="button button-outline" onClick="location.href=\'' 
-                    + urlstr + response.csv_file_url
-                    + '\'">解析結果csvファイルダウンロード</button>';
-                    console.log(csvData)
-                    //'<h4><a href="' + urlstr + response.csv_file_url + '">解析結果csvファイル</a></h4>';
-                    $('#csvfile').append(csvData);
+                    + response.csv_file_url
+                    + '\'">解析結果csvファイルダウンロード</button><br>';
+                    $('#csvfile').replaceWith(csvData);
                     // ツイート用情報生成
                     var tweetStr = '<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" \
                                 class="twitter-share-button" data-size="large" data-show-count="false"' + 
-                                'data-text=月別読書数→"' + urlstr + response.img_file_url + '"' +
+                                'data-text=月別読書数→"' + response.img_file_url + '"' +
                                 '>Tweet</a>';
                     tweetStr += '<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"><\/script>'
                     $('#tweet').replaceWith(tweetStr);

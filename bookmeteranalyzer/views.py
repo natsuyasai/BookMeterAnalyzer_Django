@@ -13,7 +13,6 @@ from .models import AnalyzeResult
 from .forms import PostForm
 from .script.analyzer import execAnalyze
 
-
 # Create your views here.
 def index(request):
     """ デフォルトページ表示
@@ -55,8 +54,8 @@ def analyze(request):
         img_file_to_json = json.dumps(str(user_data.img_file))
         csv_file_to_json = json.dumps(str(user_data.csv_file))
         # URL生成
-        img_url_str = "media/" + img_file_to_json.replace('"','')
-        csv_url_str = "media/" + csv_file_to_json.replace('"','')
+        img_url_str = settings.MEDIA_ROOT + img_file_to_json.replace('"','')
+        csv_url_str = settings.MEDIA_ROOT + csv_file_to_json.replace('"','')
         # 結果をjsonとして返す
         return JsonResponse({'img_file_url' : img_url_str, 'csv_file_url' : csv_url_str})
     except:
