@@ -64,29 +64,33 @@ class DataAnalyzer:
     def protBarGraphForMonthReads(self):
         """ 月別読書量棒グラフプロット
         """
-        # dictのkey/valueをそれぞれlistに変換
-        bookNumList = []
-        dateList = []
-        for num in self.__dateCntDict:
-            if num != '日付不明': # 日付不明はとばす
-                bookNumList.append(self.__dateCntDict[num])
-                dateList.append(num)
-        # 順番が最新順なので逆順にする
-        bookNumList.reverse()
-        dateList.reverse()
-        # 自分用デバッグコード(初登録時のデータを除外)
-        if self.__userID == '577685':
-            for i in range(0,2,1):
-                del bookNumList[0]
-                del dateList[0]
+        try:
+            # dictのkey/valueをそれぞれlistに変換
+            bookNumList = []
+            dateList = []
+            for num in self.__dateCntDict:
+                if num != '日付不明': # 日付不明はとばす
+                    bookNumList.append(self.__dateCntDict[num])
+                    dateList.append(num)
+            # 順番が最新順なので逆順にする
+            bookNumList.reverse()
+            dateList.reverse()
+            # 自分用デバッグコード(初登録時のデータを除外)
+            if self.__userID == '577685':
+                for i in range(0,2,1):
+                    del bookNumList[0]
+                    del dateList[0]
 
-        # リストからnumpyのarrayに変換
-        height = numpy.array(bookNumList)
-        left = numpy.array(dateList)
+            # リストからnumpyのarrayに変換
+            height = numpy.array(bookNumList)
+            left = numpy.array(dateList)
 
-        # グラフデータ設定
-        filename = OUT_ROOT_DIR + 'image/' + self.__userID + '.png'
-        self.__createBarGraph(left, height, '年月', '冊数', '月ごとの読書冊数', filename)
+            # グラフデータ設定
+            filename = OUT_ROOT_DIR + 'image/' + self.__userID + '.png'
+            self.__createBarGraph(left, height, '年月', '冊数', '月ごとの読書冊数', filename)
+        except:
+            import traceback
+            traceback.print_exc()
 
     
     def __createBarGraph(self, left: numpy.array, height: numpy.array, xlabel: str, ylabel: str, title:str,  filename: str):
