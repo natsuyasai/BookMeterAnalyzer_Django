@@ -26,4 +26,3 @@ def execAnalyze(userID : str):
     analyzer.outputCSV()
     # 月別読書量グラフ表示
     analyzer.protBarGraphForMonthReads()
-    # TODO:画像ファイル移動
