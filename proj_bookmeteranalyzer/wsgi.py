@@ -17,19 +17,19 @@ application = get_wsgi_application()
 
 
 # スリープ対策
-import threading
-import requests
-import time
+# import threading
+# import requests
+# import time
 
-def awake():
-    while True:
-        try:
-            print("Start Awaking")
-            requests.get("http://hogefuga.herokuapp.com/")
-            print("End")
-        except:
-            print("error")
-        time.sleep(300)
+# def awake():
+#     while True:
+#         try:
+#             print("Start Awaking")
+#             requests.get("http://hogefuga.herokuapp.com/")
+#             print("End")
+#         except:
+#             print("error")
+#         time.sleep(300)
 
-t = threading.Thread(target=awake)
-t.start()
+# t = threading.Thread(target=awake)
+# t.start()
