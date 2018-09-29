@@ -123,7 +123,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = 'staticfiles'
-MEDIA_URL = '/media/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+MEDIA_URL = 'https://bookmeteranalyzer-media.s3.amazonaws.com/media/'
 #MEDIA_ROOT = ''
 
 import dj_database_url
