@@ -121,9 +121,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_URL = 'https://s3-ap-northeast-1.amazonaws.com/bookmeteranalyzer-media/'
-#STATIC_ROOT = 'static'
-MEDIA_URL = 'https://s3-ap-northeast-1.amazonaws.com/bookmeteranalyzer-media/'
+STATIC_URL = '/static/'
+STATIC_ROOT = 'https://s3-ap-northeast-1.amazonaws.com/bookmeteranalyzer-media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = 'https://s3-ap-northeast-1.amazonaws.com/bookmeteranalyzer-media/'
 
 import dj_database_url
