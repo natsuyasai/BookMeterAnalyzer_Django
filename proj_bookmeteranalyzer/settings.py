@@ -123,9 +123,6 @@ USE_TZ = True
 
 STATIC_URL = 'https://s3-ap-northeast-1.amazonaws.com/bookmeteranalyzer-media/'
 STATIC_ROOT = 'staticfiles'
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
 MEDIA_URL = 'https://s3-ap-northeast-1.amazonaws.com/bookmeteranalyzer-media/'
 MEDIA_ROOT = 'https://s3-ap-northeast-1.amazonaws.com/bookmeteranalyzer-media/'
 
@@ -142,7 +139,6 @@ AWS_SECRET_ACCESS_KEY = ''
 AWS_STORAGE_BUCKET_NAME = 'bookmeteranalyzer-media'
 AWS_LOCATION = 'static'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-AWS_DEFAULT_ACL = 'public'
 
 DEBUG = False
 
