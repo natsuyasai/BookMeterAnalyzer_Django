@@ -88,6 +88,7 @@
                 $('#loading').append(loag_img);
             });
             $('#imgfilr').html('');
+            $('#csvfile').html('');
             $.ajax({ // 非同期実行
                 'url':'{% url "bookmeteranalyzer:analyze" %}',
                 'type':'POST',

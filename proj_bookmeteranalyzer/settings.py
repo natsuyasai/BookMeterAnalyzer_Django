@@ -122,7 +122,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = 'https://s3-ap-northeast-1.amazonaws.com/bookmeteranalyzer-media/'
-STATIC_ROOT = 'staticfiles'
+#STATIC_ROOT = 'static'
 MEDIA_URL = 'https://s3-ap-northeast-1.amazonaws.com/bookmeteranalyzer-media/'
 MEDIA_ROOT = 'https://s3-ap-northeast-1.amazonaws.com/bookmeteranalyzer-media/'
 
