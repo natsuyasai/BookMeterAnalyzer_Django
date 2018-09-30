@@ -119,8 +119,11 @@ def get_async_analyze_result(request):
         img_file_to_json = json.dumps(str(user_data.img_file))
         csv_file_to_json = json.dumps(str(user_data.csv_file))
         # URL生成
-        img_url_str = settings.MEDIA_ROOT + img_file_to_json.replace('"','')
-        csv_url_str = settings.MEDIA_ROOT + csv_file_to_json.replace('"','')
+        root_path = settings.MEDIA_ROOT
+        if settings.DEBUG == True:
+            root_path = settings.MEDIA_ROOT_LOCAL
+        img_url_str = root_path + img_file_to_json.replace('"','')
+        csv_url_str = root_path + csv_file_to_json.replace('"','')
         print(img_url_str)
         print(csv_url_str)
         # 結果をjsonとして返す

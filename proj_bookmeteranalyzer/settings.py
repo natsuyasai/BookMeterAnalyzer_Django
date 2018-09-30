@@ -120,31 +120,27 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
-
-STATIC_URL = '/static/'
-STATIC_ROOT = 'https://s3-ap-northeast-1.amazonaws.com/bookmeteranalyzer-media/'
-MEDIA_URL = '/media/'
-MEDIA_ROOT = 'https://s3-ap-northeast-1.amazonaws.com/bookmeteranalyzer-media/'
-
-import dj_database_url
-DATABASES['default'] = dj_database_url.config()
-
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-ALLOWED_HOSTS = ['*']
-
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-#AWS_ACCESS_KEY_ID = ''
-#AWS_SECRET_ACCESS_KEY = ''
-AWS_STORAGE_BUCKET_NAME = 'bookmeteranalyzer-media'
-#AWS_LOCATION = 'static'
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-AWS_PRELOAD_METADATA = True
-# Celery
-
 DEBUG = False
-
+# ローカル設定読み込み
 try:
     from .local_settings import *
 except ImportError:
     pass
+
+if DEBUG == False:
+    STATIC_URL = '/static/'
+    STATIC_ROOT = 'https://s3-ap-northeast-1.amazonaws.com/bookmeteranalyzer-media/'
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = 'https://s3-ap-northeast-1.amazonaws.com/bookmeteranalyzer-media/'
+
+    import dj_database_url
+    DATABASES['default'] = dj_database_url.config()
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    ALLOWED_HOSTS = ['*']
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    #AWS_ACCESS_KEY_ID = ''
+    #AWS_SECRET_ACCESS_KEY = ''
+    AWS_STORAGE_BUCKET_NAME = 'bookmeteranalyzer-media'
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    AWS_PRELOAD_METADATA = True
+
