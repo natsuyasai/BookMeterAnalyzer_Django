@@ -7,7 +7,7 @@
 <p>不具合等は<a href="https://twitter.com/natsuyasai7">@natsuyasai7</a>へ連絡下さい．</p>
 <hr/>
 {% if error_message %}<p><strong>{{error_message}}</strong></p>{% endif %}
-<form id="analyzefome" action="{% url 'bookmeteranalyzer:analyze' %}" method="post">
+<form id="analyzefome" action="{% url 'bookmeteranalyzer:async_analyze' %}" method="post">
     {% csrf_token %}
     <!-- User ID -->
     <div class="form-group">
@@ -67,7 +67,7 @@
     <div id="loading">
         {% load static %}
     </div>
-    <div id="imgfilr">
+    <div id="imgfile">
     </div>
     <div id="csvfile">
     </div>
@@ -87,46 +87,121 @@
                 var loag_img = '<img src="{% static "bookmeteranalyzer/img/ajax-loader.gif" %}" alt="Loading"/>'
                 $('#loading').append(loag_img);
             });
-            $('#imgfilr').html('');
+            $('#imgfile').html('');
             $('#csvfile').html('');
             $.ajax({ // 非同期実行
-                'url':'{% url "bookmeteranalyzer:analyze" %}',
-                'type':'POST',
-                'data':{
+                url:'{% url "bookmeteranalyzer:async_analyze" %}',
+                type:'POST',
+                data:{
                     'user_id':$('#id_user_id').val(),
                 },
-                'dataType':'json',
-                'timeout': '120000',
-                'success':function(response){ // 結果を反映する
-                    // ロード中表示停止
-                    $("#loading").html('');
-                    // 結果表示
-                    var rsltstr = '<h2>結果</h2>';        
-                    // 画像設定
-                    rsltstr += '<img src="' + response.img_file_url + '" alt="result" width="50%" height="50%"><br>';
-                    $('#imgfilr').replaceWith(rsltstr);
-                    // url取得
-                    //urlstr = location.href.replace('bookmeteranalyzer/','');
-                    // csvファイル設定
-                    var csvData = '<button type="button" class="button button-outline" onClick="location.href=\'' 
-                    + response.csv_file_url
-                    + '\'">解析結果csvファイルダウンロード</button><br>';
-                    $('#csvfile').replaceWith(csvData);
-                    // ツイート用情報生成
-                    var tweetStr = '<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" \
-                                class="twitter-share-button" data-size="large" data-show-count="false"' + 
-                                'data-text=月別読書数→"' + response.img_file_url + '"' +
-                                '>Tweet</a>';
-                    tweetStr += '<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"><\/script>'
-                    $('#tweet').replaceWith(tweetStr);
-                },
-                'error':function(response){
-                    // ロード中表示停止
-                    $("#loading").html('');
-                    $('#imgfilr').append('<p>エラーが発生しました</p>');
-                },
+                dataType:'json',
+                timeout: '30000',
+            })
+            .done(function(response){ // 結果を反映する
+                if(response.task_id != 'undefined')
+                {
+                    console.log(response.task_id);
+                    // 結果を取得しにいく
+                    gerResultRetry(response);
+                    return;
+                }
+                else{
+                    // 完了時処理
+                    successAnalyze(response);
+                }
+            })
+            .fail(function(response){
+                errorAnalyze();
             });
             return false;
         });
+        // 正常終了時処理
+        function successAnalyze(response)
+        {
+            // ロード中表示停止
+            $("#loading").html('');
+            // 結果表示
+            var rsltstr = '<h2>結果</h2>';        
+            // 画像設定
+            rsltstr += '<img src="' + response.img_file_url + '" alt="result" width="50%" height="50%"><br>';
+            $('#imgfile').replaceWith(rsltstr);
+            // csvファイル設定
+            var csvData = '<button type="button" class="button button-outline" onClick="location.href=\'' 
+            + response.csv_file_url
+            + '\'">解析結果csvファイルダウンロード</button><br>';
+            $('#csvfile').replaceWith(csvData);
+            // ツイート用情報生成
+            var tweetStr = '<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" \
+                        class="twitter-share-button" data-size="large" data-show-count="false"' + 
+                        'data-text=月別読書数→"' + response.img_file_url + '"' +
+                        '>Tweet</a>';
+            tweetStr += '<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"><\/script>'
+            $('#tweet').replaceWith(tweetStr);
+        }
+        // エラー時処理
+        function errorAnalyze()
+        {
+            // ロード中表示停止
+            $("#loading").html('');
+            $('#imgfilr').append('<p>エラーが発生しました</p>');
+        }
+        // 結果取得用同期通信
+        function getResult(response)
+        {
+            var rslt = false;
+            $.ajax({
+                url:'{% url "bookmeteranalyzer:get_async_analyze_result" %}',
+                type:'POST',
+                async:false, // get処理はすぐ終わるため同期にする
+                data:{
+                    'task_id':response.task_id,
+                    'user_id':response.user_id
+                },
+                dataType:'json',
+                timeout: '30000',
+            }).done(function(response)
+            {
+                if(response.img_file_url == ''){
+                    rslt = false;
+                    return false;
+                }
+                else{
+                    // 完了時処理
+                    successAnalyze(response);
+                    rslt = true;
+                    return true;
+                }
+            });
+            return rslt;
+        }
+        // 結果取得リトライ処理
+        function gerResultRetry(response)
+        {
+            var retrycnt = 0;
+            var rslt = getResult(response, retrycnt);
+            console.log(rslt)
+            // 一定時間待ってから再度取得
+            var retryajax = function(){
+                var id = setTimeout(retryajax, 5000)
+                if(retrycnt > 10){
+                    // 指定回数に到達したら終了
+                    clearTimeout(id);
+                    errorAnalyze();
+                    return;
+                }
+                else if(rslt == true){
+                    // 完了すればタイマーを停止し終了
+                    clearTimeout(id);
+                    return;
+                }
+                else{
+                    // 再取得
+                    retrycnt++;
+                    rslt = getResult(response);
+                }
+            }
+            retryajax();
+        }
     </script>
 {% endblock %}

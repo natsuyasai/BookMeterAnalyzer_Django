@@ -140,6 +140,8 @@ AWS_STORAGE_BUCKET_NAME = 'bookmeteranalyzer-media'
 #AWS_LOCATION = 'static'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 AWS_PRELOAD_METADATA = True
+# Celery
+
 DEBUG = False
 
 try:

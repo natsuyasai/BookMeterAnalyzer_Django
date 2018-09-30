@@ -13,10 +13,15 @@ from .bookmeterscraping import BookMeterScraping
 from .bookmeterscraping import BookInfo
 from .dataanalyzer import DataAnalyzer
 from .debugprint import DebugPrint
+from celery import shared_task
+import sys
+sys.path.append('../../')
+from proj_bookmeteranalyzer import celery
 #********************************
 
 # エントリポイント
-def execAnalyze(userID : str):
+@shared_task
+def execAnalyze(userID : str) -> str:
     # データ取得
     scraping = BookMeterScraping(userID)
     bookInfoList = scraping.execScraping()
@@ -26,3 +31,5 @@ def execAnalyze(userID : str):
     analyzer.outputCSV()
     # 月別読書量グラフ表示
     analyzer.protBarGraphForMonthReads()
+    print(userID)
+    return userID
