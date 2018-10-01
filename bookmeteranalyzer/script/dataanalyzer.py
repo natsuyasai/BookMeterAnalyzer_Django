@@ -22,7 +22,8 @@ from matplotlib.font_manager import FontProperties
 # const *************************
 # 本詳細ページURL
 BOOK_INFO_URL='https://bookmeter.com/books/'
-OUT_ROOT_DIR = 'bookmeteranalyzer/analyzedata/'
+#OUT_ROOT_DIR = 'bookmeteranalyzer/analyzedata/'
+OUT_ROOT_DIR = '/tmp'
 #********************************
 
 

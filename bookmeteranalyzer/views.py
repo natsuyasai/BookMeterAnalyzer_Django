@@ -109,11 +109,11 @@ def get_async_analyze_result(request):
         print(analyze_user_id)
         # 結果の画像を登録
         img_filename = analyze_user_id + '.png'
-        img_file_path = os.getcwd() + '/bookmeteranalyzer/analyzedata/image/' + img_filename
+        img_file_path = '/tmp/' + img_filename
         img_open = open(img_file_path, 'rb')
         # 解析用csv登録
         csv_filename = analyze_user_id + '.csv'
-        csv_file_path = os.getcwd() + '/bookmeteranalyzer/analyzedata/csv/' + csv_filename
+        csv_file_path = '/tmp/' + csv_filename
         csv_open = open(csv_file_path, 'rb')
         analyze_rslt = AnalyzeResult()
         analyze_rslt.user_id = analyze_user_id
