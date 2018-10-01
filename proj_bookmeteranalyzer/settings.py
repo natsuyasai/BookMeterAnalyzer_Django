@@ -151,7 +151,8 @@ if DEBUG == False:
         }
     }
 
-    app.conf.broker_url = os.environ.get('REDIS_URL'+'/0')
+    app.conf.broker_url = os.environ.get('REDIS_URL')
+    BROKER_URL = os.environ.get("REDIS_URL")
     app.conf.result_backend = os.environ.get('REDIS_URL')
 
 # celery
