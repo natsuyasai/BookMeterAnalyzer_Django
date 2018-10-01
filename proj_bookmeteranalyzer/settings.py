@@ -151,8 +151,8 @@ if DEBUG == False:
         }
     }
 
-    app.conf.broker_url = os.environ.get("REDIS_URL")
-    app.conf.result_backend = os.environ.get("REDIS_URL")
+    app.conf.broker_url = os.environ.get('REDIS_URL'+'/0')
+    app.conf.result_backend = 'redis'#os.environ.get('REDIS_URL')
 
 # celery
 app.conf.task_serializer = 'json'
