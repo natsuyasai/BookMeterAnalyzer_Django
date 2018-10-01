@@ -76,6 +76,7 @@ def async_analyze(request):
     """ 解析処理実行
     """
     try:
+        print('async_analyze')
         form = PostForm(request.POST)
         analyze_user_id = request.POST.get('user_id')
         # 文字列が数値でなければ処理終了
