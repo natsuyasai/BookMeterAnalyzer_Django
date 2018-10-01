@@ -80,10 +80,13 @@ def async_analyze(request):
         analyze_user_id = request.POST.get('user_id')
         # 文字列が数値でなければ処理終了
         if analyze_user_id.isdigit() == False:
+            print('failed')
             return JsonResponse({'' : ''})
         # 解析実施
         task = execAnalyze.delay(analyze_user_id)
         # 実行しているタスクIDを返す
+        print(task.id)
+        print(analyze_user_id)
         return JsonResponse({'task_id' : task.id, 'user_id':analyze_user_id})
     except:
         import traceback
