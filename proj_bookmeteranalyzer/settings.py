@@ -126,7 +126,7 @@ try:
     from .local_settings import *
 except ImportError:
     pass
-
+from .celery import app
 if DEBUG == False:
     STATIC_URL = '/static/'
     STATIC_ROOT = 'https://s3-ap-northeast-1.amazonaws.com/bookmeteranalyzer-media/'
@@ -151,10 +151,10 @@ if DEBUG == False:
         }
     }
 
-    BROKER_URL = os.environ.get("REDIS_URL")
-    CELERY_RESULT_BACKEND = os.environ.get("REDIS_URL")
+    app.conf.broker_url = os.environ.get("REDIS_URL")
+    app.conf.result_backend = os.environ.get("REDIS_URL")
 
 # celery
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_ACCEPT_CONTENT = ['json']
+app.conf.task_serializer = 'json'
+app.conf.result_serializer = 'json'
+app.conf.accept_content = ['json']
