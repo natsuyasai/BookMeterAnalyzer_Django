@@ -23,7 +23,7 @@ from matplotlib.font_manager import FontProperties
 # 本詳細ページURL
 BOOK_INFO_URL='https://bookmeter.com/books/'
 #OUT_ROOT_DIR = 'bookmeteranalyzer/analyzedata/'
-OUT_ROOT_DIR = '/tmp'
+OUT_ROOT_DIR = '/tmp/'
 #********************************
 
 
@@ -56,7 +56,7 @@ class DataAnalyzer:
                 + info.page + ','\
                 + BOOK_INFO_URL + info.id + '\n'\
         # ファイルへ書き込み
-        filename = OUT_ROOT_DIR + 'csv/' + self.__userID + '.csv'
+        filename = OUT_ROOT_DIR + self.__userID + '.csv'
         with open(filename, 'w', encoding='utf-8_sig') as csvFile:
             csvFile.write(writeStr)
 
@@ -87,7 +87,7 @@ class DataAnalyzer:
             left = numpy.array(dateList)
 
             # グラフデータ設定
-            filename = OUT_ROOT_DIR + 'image/' + self.__userID + '.png'
+            filename = OUT_ROOT_DIR + self.__userID + '.png'
             self.__createBarGraph(left, height, '年月', '冊数', '月ごとの読書冊数', filename)
         except:
             import traceback
