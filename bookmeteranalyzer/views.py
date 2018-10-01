@@ -96,7 +96,7 @@ def get_async_analyze_result(request):
     try:
         # 結果取得
         taks_rslt = AsyncResult(request.POST.get('task_id'))
-        if taks_rslt.ready():
+        if taks_rslt.successful() == False:
             # まだ実行中なら即空の結果を返す
             return JsonResponse({'img_file_url' : '', 'csv_file_url' : ''})
         analyze_user_id = request.POST.get('user_id')

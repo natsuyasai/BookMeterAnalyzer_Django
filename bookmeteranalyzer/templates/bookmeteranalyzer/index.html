@@ -101,7 +101,7 @@
             .done(function(response){ // 結果を反映する
                 if(response.task_id != 'undefined')
                 {
-                    console.log(response.task_id);
+                    //console.log(response.task_id);
                     // 結果を取得しにいく
                     gerResultRetry(response);
                     return;
@@ -144,7 +144,7 @@
         {
             // ロード中表示停止
             $("#loading").html('');
-            $('#imgfilr').append('<p>エラーが発生しました</p>');
+            $('#imgfilr').replaceWith('<p>エラーが発生しました</p>');
         }
         // 結果取得用同期通信
         function getResult(response)
@@ -199,6 +199,7 @@
                     // 再取得
                     retrycnt++;
                     rslt = getResult(response);
+                    console.log(rslt)
                 }
             }
             retryajax();
