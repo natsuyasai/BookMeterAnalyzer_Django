@@ -13,6 +13,7 @@ from .models import AnalyzeResult
 from .forms import PostForm
 from .script.analyzer import execAnalyze
 from celery.result import AsyncResult
+import os
 
 # Create your views here.
 def index(request):
@@ -126,6 +127,10 @@ def get_async_analyze_result(request):
         csv_url_str = root_path + csv_file_to_json.replace('"','')
         print(img_url_str)
         print(csv_url_str)
+        img_open.close()
+        csv_open.close()
+        os.remove('./bookmeteranalyzer/analyzedata/image/' + img_filename)
+        os.remove('./bookmeteranalyzer/analyzedata/csv/' + csv_filename)
         # 結果をjsonとして返す
         return JsonResponse({'img_file_url' : img_url_str, 'csv_file_url' : csv_url_str})
     except:
