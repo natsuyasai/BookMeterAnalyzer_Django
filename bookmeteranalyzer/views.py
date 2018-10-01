@@ -109,10 +109,12 @@ def get_async_analyze_result(request):
         print(analyze_user_id)
         # 結果の画像を登録
         img_filename = analyze_user_id + '.png'
-        img_open = open('./bookmeteranalyzer/analyzedata/image/' + img_filename, 'rb')
+        img_file_path = os.getcwd() + '/bookmeteranalyzer/analyzedata/image/' + img_filename
+        img_open = open(img_file_path, 'rb')
         # 解析用csv登録
         csv_filename = analyze_user_id + '.csv'
-        csv_open = open('./bookmeteranalyzer/analyzedata/csv/' + csv_filename, 'rb')
+        csv_file_path = os.getcwd() + '/bookmeteranalyzer/analyzedata/csv/' + csv_filename
+        csv_open = open(csv_file_path, 'rb')
         analyze_rslt = AnalyzeResult()
         analyze_rslt.user_id = analyze_user_id
         analyze_rslt.img_file.save(img_filename, File(img_open), save=True)
@@ -133,8 +135,8 @@ def get_async_analyze_result(request):
         print(csv_url_str)
         img_open.close()
         csv_open.close()
-        os.remove('./bookmeteranalyzer/analyzedata/image/' + img_filename)
-        os.remove('./bookmeteranalyzer/analyzedata/csv/' + csv_filename)
+        os.remove(img_file_path)
+        os.remove(csv_file_path)
         # 結果をjsonとして返す
         return JsonResponse({'img_file_url' : img_url_str, 'csv_file_url' : csv_url_str})
     except:
