@@ -7,7 +7,7 @@
 <p>不具合等は<a href="https://twitter.com/natsuyasai7">@natsuyasai7</a>へ連絡下さい．</p>
 <hr/>
 {% if error_message %}<p><strong>{{error_message}}</strong></p>{% endif %}
-<form id="analyzefome" action="{% url 'bookmeteranalyzer:async_analyze' %}" method="post">
+<form id="analyzeform" action="{% url 'bookmeteranalyzer:async_analyze' %}" method="post">
     {% csrf_token %}
     <!-- User ID -->
     <div class="form-group">
@@ -79,7 +79,7 @@
 
     <!-- ajax -->
     <script>
-        $('#analyzefome').submit(function(event) {
+        $('#analyzeform').submit(function(event) {
             // 通常のイベントを停止
             event.preventDefault();
             // ロード中表示
@@ -89,6 +89,7 @@
             });
             $('#imgfile').html('');
             $('#csvfile').html('');
+            console.log('ajax');
             $.ajax({ // 非同期実行
                 url:'{% url "bookmeteranalyzer:async_analyze" %}',
                 type:'POST',
@@ -101,7 +102,7 @@
             .done(function(response){ // 結果を反映する
                 if(response.task_id != 'undefined')
                 {
-                    //console.log(response.task_id);
+                    console.log(response.task_id);
                     // 結果を取得しにいく
                     gerResultRetry(response);
                     return;
