@@ -23,6 +23,15 @@ def index(request):
     form = PostForm()
     context = {'posts': posts, 'form': form, }
     return render(request, 'bookmeteranalyzer/index.html', context)
+
+
+def index_nontwitter(request):
+    """ デフォルトページ表示(連絡先なし)
+    """
+    posts = Post.objects.all()
+    form = PostForm()
+    context = {'posts': posts, 'form': form, }
+    return render(request, 'bookmeteranalyzer/index_nontwitter.html', context)
     
 def analyze(request):
     """ 解析処理実行

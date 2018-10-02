@@ -3,7 +3,6 @@
 {% block content %}
 <h1>読書メーター読了リスト解析</h1>
 <p>読書メーターの読んだ本の情報を解析し，登録開始日からの読書量推移をグラフ化します．(※冊数が多い場合は解析に時間がかかります．)</p>
-<p>不具合等は<a href="https://twitter.com/natsuyasai7">@natsuyasai7</a>へ連絡下さい．</p>
 <hr/>
 {% if error_message %}<p><strong>{{error_message}}</strong></p>{% endif %}
 <form id="analyzeform" action="{% url 'bookmeteranalyzer:async_analyze' %}" method="post">
