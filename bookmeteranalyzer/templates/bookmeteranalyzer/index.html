@@ -185,7 +185,7 @@
             // 一定時間待ってから再度取得
             var retryajax = function(){
                 var id = setTimeout(retryajax, 5000)
-                if(retrycnt > 40){
+                if(retrycnt > 60){
                     // 指定回数に到達したら終了
                     clearTimeout(id);
                     errorAnalyze();
