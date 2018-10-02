@@ -145,7 +145,7 @@
         {
             // ロード中表示停止
             $("#loading").html('');
-            $('#imgfilr').replaceWith('<p>エラーが発生しました</p>');
+            $('#imgfile').replaceWith('<p>エラーが発生しました</p>');
         }
         // 結果取得用同期通信
         function getResult(response)
@@ -185,7 +185,7 @@
             // 一定時間待ってから再度取得
             var retryajax = function(){
                 var id = setTimeout(retryajax, 5000)
-                if(retrycnt > 10){
+                if(retrycnt > 40){
                     // 指定回数に到達したら終了
                     clearTimeout(id);
                     errorAnalyze();
