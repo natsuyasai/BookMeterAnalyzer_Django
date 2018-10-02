@@ -154,6 +154,8 @@ if DEBUG == False:
     app.conf.broker_url = os.environ.get('REDIS_URL')
     BROKER_URL = os.environ.get("REDIS_URL")
     app.conf.result_backend = os.environ.get('REDIS_URL')
+    # tmpdir
+    OUT_ROOT_DIR = '/tmp/'
 
 # celery
 app.conf.task_serializer = 'json'

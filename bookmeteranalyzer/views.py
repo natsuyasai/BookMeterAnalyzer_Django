@@ -107,18 +107,7 @@ def get_async_analyze_result(request):
         analyze_user_id = request.POST.get('user_id')
         print(taks_rslt)
         print(analyze_user_id)
-        # 結果の画像を登録
-        img_filename = analyze_user_id + '.png'
-        img_file_path = '/tmp/' + img_filename
-        img_open = open(img_file_path, 'rb')
-        # 解析用csv登録
-        csv_filename = analyze_user_id + '.csv'
-        csv_file_path = '/tmp/' + csv_filename
-        csv_open = open(csv_file_path, 'rb')
-        analyze_rslt = AnalyzeResult()
-        analyze_rslt.user_id = analyze_user_id
-        analyze_rslt.img_file.save(img_filename, File(img_open), save=True)
-        analyze_rslt.csv_file.save(csv_filename, File(csv_open), save=True)
+
         # 結果生成
         # 指定ユーザIDの画像をDBから取得
         user_data = AnalyzeResult.objects.filter(user_id=analyze_user_id).first()
@@ -133,10 +122,6 @@ def get_async_analyze_result(request):
         csv_url_str = root_path + csv_file_to_json.replace('"','')
         print(img_url_str)
         print(csv_url_str)
-        img_open.close()
-        csv_open.close()
-        os.remove(img_file_path)
-        os.remove(csv_file_path)
         # 結果をjsonとして返す
         return JsonResponse({'img_file_url' : img_url_str, 'csv_file_url' : csv_url_str})
     except:
