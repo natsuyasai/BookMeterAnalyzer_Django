@@ -15,6 +15,7 @@ from .dataanalyzer import DataAnalyzer
 from .debugprint import DebugPrint
 from celery import shared_task
 import sys
+import os
 from django.core.files import File
 sys.path.append('../../')
 from proj_bookmeteranalyzer import celery
