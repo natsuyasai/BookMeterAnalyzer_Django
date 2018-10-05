@@ -5,7 +5,7 @@ from . import views
 app_name = 'bookmeteranalyzer'
 
 urlpatterns = [
-    path('', views.index_nontwitter, name='index'),
+    path('', views.index, name='index'),
     path('index', views.index_nontwitter, name='index_nontwitter'),
     path('index_nontwitter', views.index_nontwitter, name='index_nontwitter'),
     path('analyze', views.analyze, name='analyze'),
