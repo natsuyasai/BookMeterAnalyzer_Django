@@ -25,7 +25,7 @@ def index(request):
     return render(request, 'bookmeteranalyzer/index.html', context)
 
 
-def index_nontwitter(request):
+def index_(request):
     """ デフォルトページ表示(連絡先なし)
     """
     posts = Post.objects.all()

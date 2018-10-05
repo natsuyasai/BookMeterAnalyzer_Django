@@ -87,7 +87,7 @@
             });
             $('#imgfile').html('');
             $('#csvfile').html('');
-            console.log('ajax');
+            //console.log('ajax');
             $.ajax({ // 非同期実行
                 url:'{% url "bookmeteranalyzer:async_analyze" %}',
                 type:'POST',
@@ -179,7 +179,7 @@
         {
             var retrycnt = 0;
             var rslt = getResult(response, retrycnt);
-            console.log(rslt)
+            //console.log(rslt)
             // 一定時間待ってから再度取得
             var retryajax = function(){
                 var id = setTimeout(retryajax, 5000)
@@ -198,7 +198,7 @@
                     // 再取得
                     retrycnt++;
                     rslt = getResult(response);
-                    console.log(rslt)
+                    //console.log(rslt)
                 }
             }
             retryajax();
