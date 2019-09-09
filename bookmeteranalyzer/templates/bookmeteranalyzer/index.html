@@ -22,7 +22,7 @@
     <!-- Analyze Button -->
     <div class="form-group">
         <!--<div class="col-sm-offset-3 col-sm-6">-->
-            <button type="submit" class="button button-default">
+            <button type="submit" id="analyze-button-id" class="button button-default">
                 <i class="fa fa-plus"></i>解析実行
             </button>
         <!--</div>-->
@@ -79,6 +79,11 @@
     <!-- ajax -->
     <script>
         $('#analyzeform').submit(function(event) {
+            let btn = document.getElementById('analyze-button-id');
+            if(btn){
+                btn.disabled = 'disabled';
+            }
+
             // 通常のイベントを停止
             event.preventDefault();
             // ロード中表示
